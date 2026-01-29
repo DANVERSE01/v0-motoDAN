@@ -1,11 +1,15 @@
 "use client"
 
-import { Suspense } from "react"
-import { Canvas } from "@react-three/fiber"
+import { Suspense, lazy } from "react"
 import { Environment, PerspectiveCamera } from "@react-three/drei"
 import { motion } from "framer-motion"
+import dynamic from "next/dynamic"
 import Helmet3DModel from "./helmet-3d-model"
 import InfiniteLogoSlider from "./infinite-logo-slider"
+
+const Canvas = dynamic(() => import("@react-three/fiber").then(mod => ({ default: mod.Canvas })), {
+  ssr: false,
+})
 
 function LoadingFallback() {
   return (
