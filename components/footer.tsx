@@ -1,25 +1,16 @@
 "use client"
 
-import { Suspense } from "react"
-import { Canvas } from "@react-three/fiber"
-import { Environment, PerspectiveCamera } from "@react-three/drei"
 import { motion } from "framer-motion"
 import dynamic from "next/dynamic"
-import Helmet3DModel from "./helmet-3d-model"
 import InfiniteLogoSlider from "./infinite-logo-slider"
 
-function LoadingFallback() {
-  return (
-    <mesh>
-      <sphereGeometry args={[1.5, 16, 16]} />
-      <meshStandardMaterial color="#1a1f1a" wireframe />
-    </mesh>
-  )
-}
+const HelmetCanvas = dynamic(() => import("./helmet-canvas").then(mod => ({ default: mod.HelmetCanvas })), {
+  ssr: false,
+})
 
-function Footer() {
+export default function Footer() {
   return (
-    <footer className="bg-lorenzo-accent pt-0 px-4 md:px-8 min-h-screen flex flex-col justify-end relative pb-5" suppressHydrationWarning>
+    <footer className="bg-lorenzo-accent pt-0 px-4 md:px-8 min-h-screen flex flex-col justify-end relative pb-5">
       <div className="absolute top-0 left-0 right-0 h-72 bg-gradient-to-b from-[#f5f1e8] to-lorenzo-accent z-0" />
 
       {/* Main Dark Card Container */}
@@ -99,16 +90,7 @@ function Footer() {
 
               {/* 3D Helmet */}
               <div className="relative w-full h-[300px] md:h-[500px] z-10 mt-24 md:mt-24">
-                <Canvas>
-                  <PerspectiveCamera makeDefault position={[0, 0, 6.5]} />
-                  <ambientLight intensity={0.8} />
-                  <directionalLight position={[10, 10, 5]} intensity={1.5} />
-                  <pointLight position={[-10, -10, -5]} intensity={0.8} color="#CFFF04" />
-                  <Suspense fallback={<LoadingFallback />}>
-                    <Helmet3DModel modelPath="/3d/helmet-lorenzo.glb" />
-                  </Suspense>
-                  <Environment preset="city" />
-                </Canvas>
+                <HelmetCanvas />
               </div>
 
               {/* CTA Button - Adjusted bottom position to be closer to helmet */}
@@ -184,7 +166,3 @@ function Footer() {
     </footer>
   )
 }
-
-export default dynamic(() => Promise.resolve(Footer), {
-  ssr: false,
-})
