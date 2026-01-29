@@ -1,15 +1,12 @@
 "use client"
 
-import { Suspense, lazy } from "react"
+import { Suspense } from "react"
+import { Canvas } from "@react-three/fiber"
 import { Environment, PerspectiveCamera } from "@react-three/drei"
 import { motion } from "framer-motion"
 import dynamic from "next/dynamic"
 import Helmet3DModel from "./helmet-3d-model"
 import InfiniteLogoSlider from "./infinite-logo-slider"
-
-const Canvas = dynamic(() => import("@react-three/fiber").then(mod => ({ default: mod.Canvas })), {
-  ssr: false,
-})
 
 function LoadingFallback() {
   return (
@@ -20,9 +17,9 @@ function LoadingFallback() {
   )
 }
 
-export default function Footer() {
+function Footer() {
   return (
-    <footer className="bg-lorenzo-accent pt-0 px-4 md:px-8 min-h-screen flex flex-col justify-end relative pb-5">
+    <footer className="bg-lorenzo-accent pt-0 px-4 md:px-8 min-h-screen flex flex-col justify-end relative pb-5" suppressHydrationWarning>
       <div className="absolute top-0 left-0 right-0 h-72 bg-gradient-to-b from-[#f5f1e8] to-lorenzo-accent z-0" />
 
       {/* Main Dark Card Container */}
@@ -187,3 +184,7 @@ export default function Footer() {
     </footer>
   )
 }
+
+export default dynamic(() => Promise.resolve(Footer), {
+  ssr: false,
+})
